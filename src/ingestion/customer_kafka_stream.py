@@ -5,6 +5,7 @@ from src.common.paths import bronze_path, checkpoint_path
 from src.common.reader import read_kafka_stream
 from src.common.spark import create_spark_session
 from src.common.writer import write_parquet_stream
+from src.schemas.customer import CUSTOMER_SCHEMA
 
 
 # ----------------------------
@@ -20,24 +21,6 @@ kafka_config = load_config("config/kafka.yaml")
 
 BOOTSTRAP_SERVERS = kafka_config.get("bootstrap_servers", "localhost:9092")
 KAFKA_TOPIC = kafka_config.get("topics", {}).get("customers", "customers")
-
-
-
-# ----------------------------
-# Schema
-# ----------------------------
-customer_schema = StructType([
-    StructField("created_at", StringType()),
-    StructField("customer_id", StringType()),
-    StructField("customer_status", StringType()),
-    StructField("email", StringType()),
-    StructField("first_name", StringType()),
-    StructField("is_deleted", StringType()),
-    StructField("last_name", StringType()),
-    StructField("phone", StringType()),
-    StructField("registered_at", StringType()),
-    StructField("updated_at", StringType())
-])
 
 
 # ----------------------------
@@ -60,7 +43,7 @@ json_df = kafka_df.selectExpr(
 bronze_df = (
     json_df
     .select(
-        from_json(col("value"), customer_schema).alias("data")
+        from_json(col("value"), CUSTOMER_SCHEMA).alias("data")
     )
     .select("data.*")
     .withColumn("ingest_time", current_timestamp())
