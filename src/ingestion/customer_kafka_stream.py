@@ -1,32 +1,25 @@
-from pathlib import Path
-from pyspark.sql import SparkSession
 from pyspark.sql.functions import *
 from pyspark.sql.types import *
+from src.common.config import load_config
+from src.common.paths import bronze_path, checkpoint_path
+from src.common.reader import read_kafka_stream
+from src.common.spark import create_spark_session
+from src.common.writer import write_parquet_stream
 
 
 # ----------------------------
 # Spark Session
 # ----------------------------
-spark = (
-    SparkSession.builder
-    .appName("Customer Stream")
-    .config(
-        "spark.jars.packages",
-        "org.apache.spark:spark-sql-kafka-0-10_2.12:3.5.1"
-    )
-    .config("spark.sql.streaming.schemaInference", "true")
-    .config("spark.sql.session.timeZone", "UTC")
-    .getOrCreate()
-)
-
-spark.sparkContext.setLogLevel("WARN")
+spark = create_spark_session("Customer Bronze Ingestion")
 
 
 # ----------------------------
 # Set Configurations
 # ----------------------------
-KAFKA_TOPIC = "telemetry.ecommerce.customers"
-BOOTSTRAP_SERVERS = "localhost:9092"
+kafka_config = load_config("config/kafka.yaml")
+
+BOOTSTRAP_SERVERS = kafka_config.get("bootstrap_servers", "localhost:9092")
+KAFKA_TOPIC = kafka_config.get("topics", {}).get("customers", "customers")
 
 
 
@@ -50,17 +43,17 @@ customer_schema = StructType([
 # ----------------------------
 # Read from Kafka
 # ----------------------------
-df = spark.readStream \
-    .format("kafka") \
-    .option("kafka.bootstrap.servers", BOOTSTRAP_SERVERS) \
-    .option("subscribe", KAFKA_TOPIC) \
-    .load()
+kafka_df = read_kafka_stream(
+    spark=spark,
+    bootstrap_servers=BOOTSTRAP_SERVERS,
+    topic=KAFKA_TOPIC
+)
 
 
 # ----------------------------
 # Parse JSON
 # ----------------------------
-json_df = df.selectExpr(
+json_df = kafka_df.selectExpr(
     "CAST(value AS STRING) AS value"
 )
 
@@ -77,22 +70,18 @@ bronze_df = (
 # ----------------------------
 # Output Paths
 # ----------------------------
-PROJECT_ROOT = Path.cwd()
-
-OUTPUT_PATH = PROJECT_ROOT  / "Data" / "bronze" / "customers"
-CHECKPOINT_PATH = PROJECT_ROOT / "Data" / "checkpoints" / "customers"
+OUTPUT_PATH = bronze_path("customers")
+CHECKPOINT_PATH = checkpoint_path("customers")
 
 
 # ----------------------------
 # Write Stream (Parquet)
 # ----------------------------
-query = bronze_df.writeStream \
-    .format("parquet") \
-    .option("path", OUTPUT_PATH) \
-    .option("checkpointLocation", CHECKPOINT_PATH) \
-    .outputMode("append") \
-    .start()
-
+query = write_parquet_stream(
+    dataframe=bronze_df,
+    output_path=OUTPUT_PATH,
+    checkpoint_path=CHECKPOINT_PATH
+)
 
 # ----------------------------
 # Monitor
