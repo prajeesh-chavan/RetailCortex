@@ -60,31 +60,18 @@ df = spark.readStream \
 # ----------------------------
 # Parse JSON
 # ----------------------------
-json_df = df.selectExpr("CAST(value AS STRING) as value")
+json_df = df.selectExpr(
+    "CAST(value AS STRING) AS value"
+)
 
-parsed_df = json_df.select(
-    from_json(col("value"), customer_schema).alias("data")
-).select("data.*")
-
-
-# ----------------------------
-# Transformations (clean layer)
-# ----------------------------
-clean_df = parsed_df \
-    .withColumn("created_at", to_timestamp("created_at")) \
-    .withColumn("registered_at", to_timestamp("registered_at")) \
-    .withColumn("updated_at", to_timestamp("updated_at")) \
-    .withColumn("ingest_time", current_timestamp()) \
-    .withColumn("email", lower(col("email"))) \
-    .withColumn(
-        "full_name",
-        concat_ws(" ", col("first_name"), col("last_name"))
-    ) \
-    .withColumn(
-        "is_deleted",
-        col("is_deleted").cast("boolean")
-    ) \
-    .filter(col("is_deleted") == False)
+bronze_df = (
+    json_df
+    .select(
+        from_json(col("value"), customer_schema).alias("data")
+    )
+    .select("data.*")
+    .withColumn("ingest_time", current_timestamp())
+)
 
 
 # ----------------------------
@@ -99,7 +86,7 @@ CHECKPOINT_PATH = PROJECT_ROOT / "Data" / "checkpoints" / "customers"
 # ----------------------------
 # Write Stream (Parquet)
 # ----------------------------
-query = clean_df.writeStream \
+query = bronze_df.writeStream \
     .format("parquet") \
     .option("path", OUTPUT_PATH) \
     .option("checkpointLocation", CHECKPOINT_PATH) \
