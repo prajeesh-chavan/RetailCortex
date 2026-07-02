@@ -22,3 +22,26 @@ def write_parquet_stream(
         .start()
 
     return query
+
+def write_snowflake_batch(
+    dataframe,
+    sf_options,
+    table_name,
+):
+    """
+    Write a DataFrame to a Snowflake table.
+
+    Args:
+        dataframe (DataFrame): The DataFrame to write.
+        sf_options (dict): A dictionary containing Snowflake connection options.
+        table_name (str): The name of the Snowflake table to write to.
+
+    Returns:
+        None
+    """
+    dataframe.write \
+        .format("snowflake") \
+        .options(**sf_options) \
+        .option("dbtable", table_name) \
+        .mode("append") \
+        .save()

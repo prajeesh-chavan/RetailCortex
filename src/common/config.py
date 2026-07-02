@@ -1,3 +1,8 @@
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
+
 import yaml
 
 def load_config(config_path: str) -> dict:
@@ -13,3 +18,15 @@ def load_config(config_path: str) -> dict:
     with open(config_path, 'r') as file:
         config = yaml.safe_load(file)
     return config
+
+def get_snowflake_options():
+    config = load_config("config/snowflake.yaml")
+    return {
+        "sfURL": os.environ.get("SNOWFLAKE_URL"),
+        "sfDatabase": config["database"],
+        "sfSchema": config["schema"],
+        "sfWarehouse": config["warehouse"],
+        "sfRole": config["role"],
+        "sfUser": os.environ.get("SNOWFLAKE_USER"),
+        "sfPassword": os.environ.get("SNOWFLAKE_PASSWORD")
+    }

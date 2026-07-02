@@ -23,3 +23,20 @@ def read_kafka_stream(
         .load()
 
     return df
+
+def read_parquet_batch(
+    spark: SparkSession,
+    path: str
+):
+    """
+    Read a batch DataFrame from a Parquet file.
+
+    Args:
+        spark (SparkSession): The Spark session.
+        path (str): The path to the Parquet file.
+
+    Returns:
+        DataFrame: The batch DataFrame read from the Parquet file.
+    """
+    df = spark.read.parquet(path)
+    return df
