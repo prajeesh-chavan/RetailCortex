@@ -47,6 +47,7 @@ bronze_df = (
     )
     .select("data.*")
     .withColumn("ingest_time", current_timestamp())
+    .withColumn("ingest_date", to_date(col("ingest_time")))
 )
 
 
@@ -63,7 +64,8 @@ CHECKPOINT_PATH = checkpoint_path("customers")
 query = write_parquet_stream(
     dataframe=bronze_df,
     output_path=OUTPUT_PATH,
-    checkpoint_path=CHECKPOINT_PATH
+    checkpoint_path=CHECKPOINT_PATH,
+    partitionBy=["ingest_date"]
 )
 
 # ----------------------------
