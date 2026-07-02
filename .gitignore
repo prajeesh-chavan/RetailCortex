@@ -68,3 +68,10 @@ data/
 # Secrets
 *.pem
 *.key
+
+# Logs and Local System Folders
+dbt_modules/
+dbt_packages/
+
+# Hidden configuration folders (where profiles.yml usually sits)
+.dbt/
