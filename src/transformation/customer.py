@@ -16,14 +16,16 @@ bronze_df = read_parquet_batch(
     path=str(bronze_path)
 )
 
-clean_df = bronze_df \
-    .withColumn("created_at", to_timestamp("created_at")) \
-    .withColumn("registered_at", to_timestamp("registered_at")) \
-    .withColumn("updated_at", to_timestamp("updated_at")) \
-    .withColumn("ingest_time", to_timestamp("ingest_time")) \
-    .withColumn("email", lower(col("email"))) \
-    .withColumn("full_name", concat_ws(" ", col("first_name"), col("last_name"))) \
-    .filter(col("is_deleted") == "false")
+clean_df = bronze_df.select(
+    "*",
+    to_timestamp("created_at").alias("created_at"),
+    to_timestamp("registered_at").alias("registered_at"),
+    to_timestamp("updated_at").alias("updated_at"),
+    to_timestamp("ingest_time").alias("ingest_time"),
+    lower(col("email")).alias("email"),
+    concat_ws(" ", col("first_name"), col("last_name")).alias("full_name"),
+    lower(col("is_deleted")).cast("boolean").alias("is_deleted")
+)
 
 
 final_df = clean_df.select(
@@ -32,6 +34,7 @@ final_df = clean_df.select(
     "email",
     "registered_at",
     "ingest_time",
+    "is_deleted",
     "created_at",
     "updated_at"
 )
