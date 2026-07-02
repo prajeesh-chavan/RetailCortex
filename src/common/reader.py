@@ -40,3 +40,14 @@ def read_parquet_batch(
     """
     df = spark.read.parquet(path)
     return df
+
+def read_parquet_stream(
+    spark: SparkSession,
+    path: str,
+    schema=None
+):
+    return (
+        spark.readStream
+        .schema(schema)
+        .parquet(path)
+    )
