@@ -1,0 +1,9 @@
+version: 2
+
+sources:
+  - name: snowflake_silver
+    database: RETAIL_DB
+    schema: SILVER
+    tables:
+      - name: customers
+        description: "Cleaned customer records written incrementally by PySpark"
