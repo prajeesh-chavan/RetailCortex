@@ -3,7 +3,7 @@ from src.common.spark import create_spark_session
 from src.common.paths import bronze_path, checkpoint_path
 from src.common.config import get_snowflake_options
 from src.common.writer import write_snowflake_batch
-from pyspark.sql.functions import col, to_timestamp, lower, concat_ws
+from pyspark.sql.functions import col, to_timestamp, lower, concat_ws, upper
 from src.schemas.customer import CUSTOMER_BRONZE_SCHEMA
 
 spark = create_spark_session("Customer Silver Transformation")
@@ -25,12 +25,16 @@ clean_df = streaming_bronze_df \
     .withColumn("ingest_time", to_timestamp("ingest_time")) \
     .withColumn("email", lower(col("email"))) \
     .withColumn("full_name", concat_ws(" ", col("first_name"), col("last_name"))) \
-    .withColumn("is_deleted", (lower(col("is_deleted"))).cast("boolean"))
+    .withColumn("is_deleted", (lower(col("is_deleted"))).cast("boolean")) \
+    .withColumn("created_time", to_timestamp("created_time")) \
+    .withColumn("customer_status", upper(col("customer_status")))
 
 final_df = clean_df.select(
     "customer_id",
     "full_name",
     "email",
+    "phone",
+    "customer_status",
     "registered_at",
     "ingest_time",
     "is_deleted",

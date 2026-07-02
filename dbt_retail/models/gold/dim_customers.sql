@@ -8,7 +8,7 @@ WITH source_silver AS (
     SELECT * FROM {{ source('snowflake_silver', 'customers') }}
     
     {% if is_incremental() %}
-      -- This filter ensures Snowflake only scans rows updated since the last dbt run
+      -- High-performance filter: scans only rows modified since our last run
       WHERE ingest_time > (SELECT MAX(silver_ingest_time) FROM {{ this }})
     {% endif %}
 ),
@@ -18,20 +18,11 @@ gold_transformations AS (
         customer_id,
         full_name,
         email,
-        registered_at,
-        ingest_time AS silver_ingest_time,
-        
-        -- Handle soft deletes safely
+        phone,
+        customer_status,
+        CAST(TO_CHAR(registered_at, 'YYYYMMDD') AS INT) AS registered_date_key,
         COALESCE(is_deleted, FALSE) AS is_deleted,
-        
-        -- Clean up text formatting
-        TRIM(full_name) AS cleaned_full_name,
-        
-        -- Business Logic metrics
-        DATE(registered_at) AS registration_date,
-        YEAR(registered_at) AS registration_year,
-        
-        -- Row-level audit metadata
+        ingest_time AS silver_ingest_time,
         CURRENT_TIMESTAMP() AS gold_updated_at
 
     FROM source_silver
