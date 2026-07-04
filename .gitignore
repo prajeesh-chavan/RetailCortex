@@ -75,3 +75,7 @@ dbt_packages/
 
 # Hidden configuration folders (where profiles.yml usually sits)
 .dbt/
+
+cmd.md
+
+temp/
