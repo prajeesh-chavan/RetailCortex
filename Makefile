@@ -19,6 +19,9 @@ silver-all:
 		python -m src.silver.$$entity; \
 	done
 
+dbt-deps:
+	cd dbt_retail && dbt deps
+
 dbt-run:
 	cd dbt_retail && dbt run
 

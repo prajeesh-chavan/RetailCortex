@@ -19,21 +19,29 @@ def run_bronze_pipeline(entity, kafka_topic, schema):
             spark=spark,
             bootstrap_servers=kafka_config["bootstrap_servers"],
             topic=kafka_topic
-        ).selectExpr("CAST(value AS STRING) AS raw_value")
+        ).select(
+            col("key").cast("string").alias("kafka_key"),
+            col("topic").alias("kafka_topic"),
+            col("partition").alias("kafka_partition"),
+            col("offset").alias("kafka_offset"),
+            col("value").cast("string").alias("raw_value"),
+        )
 
         parsed_df = raw_df.withColumn("data", from_json(col("raw_value"), schema))
 
         def process_batch(batch_df, batch_id):
-            good = batch_df.filter(col("data").isNotNull()).select("data.*")
+            good = batch_df.filter(col("data").isNotNull()).select(
+                "data.*", "kafka_key", "kafka_topic", "kafka_partition", "kafka_offset",
+            )
             bad = batch_df.filter(col("data").isNull()).select("raw_value")
 
             good_count = good.count()
             bad_count = write_bronze_dlq(bad, entity)
 
             if good_count > 0:
-                good = good.withColumn("ingest_time", current_timestamp()) \
-                           .withColumn("ingest_date", to_date(col("ingest_time")))
-                good.write.mode("append").partitionBy("ingest_date").parquet(str(bronze_path(entity)))
+                good = good.withColumn("ingestion_timestamp", current_timestamp()) \
+                           .withColumn("ingestion_date", to_date(col("ingestion_timestamp")))
+                good.write.mode("append").partitionBy("ingestion_date").parquet(str(bronze_path(entity)))
 
             logger.info(
                 f"Batch {batch_id} complete | entity={entity} "

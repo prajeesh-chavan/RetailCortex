@@ -1,4 +1,4 @@
-from pyspark.sql.functions import col, to_timestamp, lower, concat_ws, upper
+from pyspark.sql.functions import col, to_timestamp, to_date, lower, concat_ws, upper
 from src.schemas.customer_schema import CUSTOMER_BRONZE_SCHEMA
 from src.silver.runner import run_silver_pipeline
 
@@ -8,24 +8,30 @@ def transform_customer(df):
         .withColumn("created_at", to_timestamp("created_at")) \
         .withColumn("registered_at", to_timestamp("registered_at")) \
         .withColumn("updated_at", to_timestamp("updated_at")) \
-        .withColumn("ingest_time", to_timestamp("ingest_time")) \
+        .withColumn("date_of_birth", to_date("date_of_birth")) \
         .withColumn("email", lower(col("email"))) \
         .withColumn("full_name", concat_ws(" ", col("first_name"), col("last_name"))) \
         .withColumn("is_deleted", lower(col("is_deleted")).cast("boolean")) \
-        .withColumn("created_time", to_timestamp("created_time")) \
-        .withColumn("customer_status", upper(col("customer_status")))
+        .withColumn("customer_status", upper(col("customer_status"))) \
+        .withColumn("customer_type", upper(col("customer_type"))) \
+        .withColumn("registered_date", to_date("registered_at"))
 
     return clean_df.select(
         "customer_id",
+        "first_name",
+        "last_name",
         "full_name",
         "email",
         "phone",
+        "date_of_birth",
         "customer_status",
+        "customer_type",
+        "registered_date",
         "registered_at",
-        "ingest_time",
-        "is_deleted",
         "created_at",
-        "updated_at"
+        "updated_at",
+        "is_deleted",
+        "ingestion_timestamp",
     )
 
 

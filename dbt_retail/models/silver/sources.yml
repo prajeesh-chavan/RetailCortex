@@ -11,7 +11,7 @@ sources:
       error_after:
         count: 6
         period: hour
-    loaded_at_field: ingest_time
+    loaded_at_field: ingestion_timestamp
 
     tables:
       - name: customers
@@ -26,7 +26,12 @@ sources:
           - name: customer_status
             tests:
               - accepted_values:
-                  values: ["ACTIVE", "INACTIVE", "SUSPENDED"]
+                  values: ["ACTIVE", "INACTIVE", "BLOCKED"]
+          - name: customer_type
+            tests:
+              - accepted_values:
+                  values: ["INDIVIDUAL", "BUSINESS"]
           - name: is_deleted
             tests:
               - not_null
+
