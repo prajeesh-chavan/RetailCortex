@@ -1,7 +1,6 @@
 from pathlib import Path
+from src.common.settings import SETTINGS
 
-
-PROJECT_ROOT = Path.cwd()
 
 def bronze_path(entity):
     """
@@ -13,7 +12,7 @@ def bronze_path(entity):
     Returns:
         Path: The path for the bronze layer of the given entity.
     """
-    return PROJECT_ROOT / "Data" / "bronze" / entity
+    return Path(SETTINGS.bronze_dir) / entity
 
 def checkpoint_path(entity):
     """
@@ -25,4 +24,4 @@ def checkpoint_path(entity):
     Returns:
         Path: The path for the checkpoint files of the given entity.
     """
-    return PROJECT_ROOT / "Data" / "checkpoints" / entity
+    return Path(SETTINGS.checkpoint_dir) / entity

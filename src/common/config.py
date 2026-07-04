@@ -20,7 +20,8 @@ def load_config(config_path: str) -> dict:
     return config
 
 def get_snowflake_options():
-    config = load_config("config/snowflake.yaml")
+    from src.common.settings import SETTINGS
+    config = load_config(SETTINGS.snowflake_config)
     return {
         "sfURL": os.environ.get("SNOWFLAKE_URL"),
         "sfDatabase": config["database"],
@@ -30,3 +31,8 @@ def get_snowflake_options():
         "sfUser": os.environ.get("SNOWFLAKE_USER"),
         "sfPassword": os.environ.get("SNOWFLAKE_PASSWORD")
     }
+
+def get_kafka_config():
+    from src.common.settings import SETTINGS
+    config = load_config(SETTINGS.kafka_config)
+    return config

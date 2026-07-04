@@ -1,6 +1,6 @@
 from pyspark.sql.functions import *
 from pyspark.sql.types import *
-from src.common.config import load_config
+from src.common.config import get_kafka_config
 from src.common.paths import bronze_path, checkpoint_path
 from src.common.reader import read_kafka_stream
 from src.common.spark import create_spark_session
@@ -17,7 +17,7 @@ spark = create_spark_session("Customer Bronze Ingestion")
 # ----------------------------
 # Set Configurations
 # ----------------------------
-kafka_config = load_config("config/kafka.yaml")
+kafka_config = get_kafka_config()
 
 BOOTSTRAP_SERVERS = kafka_config.get("bootstrap_servers", "localhost:9092")
 KAFKA_TOPIC = kafka_config.get("topics", {}).get("customers", "customers")
