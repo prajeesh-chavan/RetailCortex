@@ -1,4 +1,4 @@
 warehouse: COMPUTE_WH
 database: RETAIL_DB
 schema: SILVER
-role: ACCOUNTADMIN
+role: RETAIL_ETL_ROLE
