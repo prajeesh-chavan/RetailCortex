@@ -1,0 +1,22 @@
+version: 2
+
+models:
+  - name: dim_customers
+    description: "Customer dimension table — one row per customer, updated incrementally"
+    columns:
+      - name: customer_id
+        description: "Primary key — unique customer identifier"
+        tests: [unique, not_null]
+      - name: email
+        tests: [not_null]
+      - name: full_name
+        description: "Concatenated first_name + last_name"
+        tests: [not_null]
+      - name: customer_status
+        tests:
+          - accepted_values:
+              values: ["ACTIVE", "INACTIVE", "SUSPENDED"]
+      - name: is_deleted
+        tests: [not_null]
+      - name: silver_ingest_time
+        tests: [not_null]
