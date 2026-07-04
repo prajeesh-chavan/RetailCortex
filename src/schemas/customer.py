@@ -27,5 +27,5 @@ CUSTOMER_BRONZE_SCHEMA = StructType([
     StructField("updated_at", StringType()),
     StructField("ingest_time", TimestampType()),
     StructField("ingest_date", DateType()),
-    StructField("created_time", StringType()),
+    StructField("created_time", TimestampType()),
 ])
