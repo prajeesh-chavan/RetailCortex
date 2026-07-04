@@ -4,14 +4,15 @@ sources:
   - name: snowflake_silver
     database: RETAIL_DB
     schema: SILVER
-    freshness:
-      warn_after:
-        count: 2
-        period: hour
-      error_after:
-        count: 6
-        period: hour
-    loaded_at_field: ingestion_timestamp
+    config:
+      freshness:
+        warn_after:
+          count: 2
+          period: hour
+        error_after:
+          count: 6
+          period: hour
+      loaded_at_field: ingestion_timestamp
 
     tables:
       - name: customers

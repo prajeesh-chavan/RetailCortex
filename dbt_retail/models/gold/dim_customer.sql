@@ -10,7 +10,7 @@ WITH source_silver AS (
 )
 
 SELECT
-    {{ dbt_utils.surrogate_key(['customer_id']) }} AS customer_key,
+    {{ dbt_utils.generate_surrogate_key(['customer_id']) }} AS customer_key,
     customer_id,
     first_name,
     last_name,
