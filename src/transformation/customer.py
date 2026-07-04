@@ -49,7 +49,8 @@ def merge_into_snowflake(batch_df, batch_id):
     write_snowflake_batch(
         dataframe=batch_df,
         sf_options=sf_options,
-        table_name="customers"
+        table_name="customers",
+        merge_key="customer_id"
     )
 
 query = (
