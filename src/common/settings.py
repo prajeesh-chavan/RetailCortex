@@ -32,14 +32,14 @@ class Settings:
     def bronze_dir(self) -> str:
         return os.environ.get(
             "BRONZE_DIR",
-            str(self._project_root / "Data" / "bronze")
+            str(self._project_root / "data" / "bronze")
         )
 
     @property
     def checkpoint_dir(self) -> str:
         return os.environ.get(
             "CHECKPOINT_DIR",
-            str(self._project_root / "Data" / "checkpoints")
+            str(self._project_root / "data" / "checkpoints")
         )
 
 

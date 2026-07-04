@@ -4,7 +4,7 @@ from src.common.paths import bronze_path, checkpoint_path
 from src.common.config import get_snowflake_options
 from src.common.writer import write_snowflake_batch
 from pyspark.sql.functions import col, to_timestamp, lower, concat_ws, upper
-from src.schemas.customer import CUSTOMER_BRONZE_SCHEMA
+from src.schemas.customer_schema import CUSTOMER_BRONZE_SCHEMA
 
 spark = create_spark_session("Customer Silver Transformation")
 bronze_path = bronze_path("customers")

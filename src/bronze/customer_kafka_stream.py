@@ -5,7 +5,7 @@ from src.common.paths import bronze_path, checkpoint_path
 from src.common.reader import read_kafka_stream
 from src.common.spark import create_spark_session
 from src.common.writer import write_parquet_stream
-from src.schemas.customer import CUSTOMER_SCHEMA
+from src.schemas.customer_schema import CUSTOMER_SCHEMA
 
 
 # ----------------------------
