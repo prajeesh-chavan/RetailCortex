@@ -17,6 +17,6 @@ def create_spark_session(app_name: str) -> SparkSession:
         .getOrCreate()
     )
 
-    spark.sparkContext.setLogLevel("INFO")
+    spark.sparkContext.setLogLevel("WARN")
 
     return spark
