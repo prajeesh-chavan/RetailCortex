@@ -6,11 +6,7 @@
 
 WITH source_silver AS (
     SELECT * FROM {{ source('snowflake_silver', 'customers') }}
-    
-    {% if is_incremental() %}
-      -- High-performance filter: scans only rows modified since our last run
-      WHERE ingest_time > (SELECT MAX(silver_ingest_time) FROM {{ this }})
-    {% endif %}
+    {{ incremental_filter() }}
 ),
 
 gold_transformations AS (
