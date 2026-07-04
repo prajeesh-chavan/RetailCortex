@@ -3,32 +3,53 @@ from src.common.config import get_kafka_config
 from src.common.paths import bronze_path, checkpoint_path
 from src.common.reader import read_kafka_stream
 from src.common.spark import create_spark_session
-from src.common.writer import write_parquet_stream
+from src.common.logger import setup_logger
+from src.common.dlq import write_bronze_dlq
 
 
 def run_bronze_pipeline(entity, kafka_topic, schema):
-    spark = create_spark_session(f"{entity} Bronze Ingestion")
+    logger = setup_logger(f"bronze.{entity}")
+    logger.info(f"Starting bronze pipeline | entity={entity} topic={kafka_topic}")
 
-    kafka_df = read_kafka_stream(
-        spark=spark,
-        bootstrap_servers=get_kafka_config()["bootstrap_servers"],
-        topic=kafka_topic
-    )
+    try:
+        spark = create_spark_session(f"{entity} Bronze Ingestion")
+        kafka_config = get_kafka_config()
 
-    bronze_df = (
-        kafka_df
-        .selectExpr("CAST(value AS STRING) AS value")
-        .select(from_json(col("value"), schema).alias("data"))
-        .select("data.*")
-        .withColumn("ingest_time", current_timestamp())
-        .withColumn("ingest_date", to_date(col("ingest_time")))
-    )
+        raw_df = read_kafka_stream(
+            spark=spark,
+            bootstrap_servers=kafka_config["bootstrap_servers"],
+            topic=kafka_topic
+        ).selectExpr("CAST(value AS STRING) AS raw_value")
 
-    query = write_parquet_stream(
-        dataframe=bronze_df,
-        output_path=str(bronze_path(entity)),
-        checkpoint_path=str(checkpoint_path(entity)),
-        partitionBy=["ingest_date"]
-    )
+        parsed_df = raw_df.withColumn("data", from_json(col("raw_value"), schema))
 
-    query.awaitTermination()
+        def process_batch(batch_df, batch_id):
+            good = batch_df.filter(col("data").isNotNull()).select("data.*")
+            bad = batch_df.filter(col("data").isNull()).select("raw_value")
+
+            good_count = good.count()
+            bad_count = write_bronze_dlq(bad, entity)
+
+            if good_count > 0:
+                good = good.withColumn("ingest_time", current_timestamp()) \
+                           .withColumn("ingest_date", to_date(col("ingest_time")))
+                good.write.mode("append").partitionBy("ingest_date").parquet(str(bronze_path(entity)))
+
+            logger.info(
+                f"Batch {batch_id} complete | entity={entity} "
+                f"written={good_count} dlq={bad_count}"
+            )
+
+        query = (
+            parsed_df.writeStream
+            .foreachBatch(process_batch)
+            .option("checkpointLocation", str(checkpoint_path(entity)))
+            .start()
+        )
+
+        logger.info(f"Bronze pipeline running | entity={entity}")
+        query.awaitTermination()
+
+    except Exception:
+        logger.exception(f"Bronze pipeline failed | entity={entity}")
+        raise
