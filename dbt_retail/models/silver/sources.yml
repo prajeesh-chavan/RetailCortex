@@ -71,3 +71,25 @@ sources:
           - name: is_active
             tests: [not_null]
 
+      - name: products
+        description: "Cleaned product records written incrementally by PySpark"
+        columns:
+          - name: product_id
+            tests: [unique, not_null]
+          - name: product_name
+            tests: [not_null]
+          - name: product_status
+            tests:
+              - accepted_values:
+                  values: ["ACTIVE", "DISCONTINUED", "OUT_OF_CATALOG"]
+
+      - name: product_variants
+        description: "Cleaned product variant records written incrementally by PySpark"
+        columns:
+          - name: variant_id
+            tests: [unique, not_null]
+          - name: product_id
+            tests: [not_null]
+          - name: sku
+            tests: [unique, not_null]
+
