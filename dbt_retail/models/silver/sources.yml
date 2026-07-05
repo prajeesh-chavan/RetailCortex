@@ -42,12 +42,26 @@ sources:
           - name: carrier_id
             tests: [unique, not_null]
           - name: carrier_name
+            tests: [not_null]
+          - name: is_active
+            tests: [not_null]
+
       - name: sales_channels
         description: "Cleaned sales channel records written incrementally by PySpark"
         columns:
           - name: channel_id
             tests: [unique, not_null]
           - name: channel_name
+            tests: [not_null]
+          - name: is_active
+            tests: [not_null]
+
+      - name: categories
+        description: "Cleaned category records written incrementally by PySpark"
+        columns:
+          - name: category_id
+            tests: [unique, not_null]
+          - name: category_name
             tests: [not_null]
           - name: is_active
             tests: [not_null]
