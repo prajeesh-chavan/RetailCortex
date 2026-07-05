@@ -71,3 +71,25 @@ sources:
           - name: is_active
             tests: [not_null]
 
+      - name: vendors
+        description: "Cleaned vendor records written incrementally by PySpark"
+        columns:
+          - name: vendor_id
+            tests: [unique, not_null]
+          - name: vendor_name
+            tests: [not_null]
+          - name: vendor_status
+            tests:
+              - accepted_values:
+                  values: ["ACTIVE", "INACTIVE", "SUSPENDED"]
+
+      - name: vendor_addresses
+        description: "Cleaned vendor-address mapping records written incrementally by PySpark"
+        columns:
+          - name: vendor_address_id
+            tests: [unique, not_null]
+          - name: vendor_id
+            tests: [not_null]
+          - name: address_id
+            tests: [not_null]
+
