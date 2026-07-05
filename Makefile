@@ -1,4 +1,4 @@
-ENTITIES := customers orders products
+ENTITIES := customers orders products sales_channels
 ENTITY ?= customers
 
 bronze:
