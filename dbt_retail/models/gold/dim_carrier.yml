@@ -1,0 +1,16 @@
+version: 2
+
+models:
+  - name: dim_carrier
+    description: "Carrier dimension — one row per carrier, built incrementally from silver"
+    columns:
+      - name: carrier_key
+        description: "Surrogate key generated via dbt_utils.generate_surrogate_key"
+        tests: [unique, not_null]
+      - name: carrier_id
+        description: "Natural key from source system"
+        tests: [not_null]
+      - name: carrier_name
+        tests: [not_null]
+      - name: is_active
+        tests: [not_null]
