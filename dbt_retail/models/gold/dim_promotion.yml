@@ -1,0 +1,22 @@
+version: 2
+
+models:
+  - name: dim_promotion
+    description: "Promotion dimension — one row per promotion, built incrementally from silver"
+    columns:
+      - name: promotion_key
+        description: "Surrogate key generated via dbt_utils.generate_surrogate_key"
+        tests: [unique, not_null]
+      - name: promotion_id
+        description: "Natural key from source system"
+        tests: [not_null]
+      - name: promotion_name
+        tests: [not_null]
+      - name: promotion_code
+        tests: [unique]
+      - name: promotion_type
+        tests:
+          - accepted_values:
+              values: ["PERCENTAGE", "FIXED_AMOUNT", "BUY_X_GET_Y", "FREE_SHIPPING"]
+      - name: is_active
+        tests: [not_null]
