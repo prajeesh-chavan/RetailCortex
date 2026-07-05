@@ -71,3 +71,13 @@ sources:
           - name: is_active
             tests: [not_null]
 
+      - name: brands
+        description: "Cleaned brand records written incrementally by PySpark"
+        columns:
+          - name: brand_id
+            tests: [unique, not_null]
+          - name: brand_name
+            tests: [not_null]
+          - name: is_active
+            tests: [not_null]
+
