@@ -45,7 +45,7 @@ sources:
             tests: [not_null]
           - name: is_active
             tests: [not_null]
-
+            
       - name: sales_channels
         description: "Cleaned sales channel records written incrementally by PySpark"
         columns:
@@ -63,6 +63,20 @@ sources:
             tests: [unique, not_null]
           - name: category_name
             tests: [not_null]
+            
+      - name: promotions
+        description: "Cleaned promotion records written incrementally by PySpark"
+        columns:
+          - name: promotion_id
+            tests: [unique, not_null]
+          - name: promotion_name
+            tests: [not_null]
+          - name: promotion_code
+            tests: [unique]
+          - name: promotion_type
+            tests:
+              - accepted_values:
+                  values: ["PERCENTAGE", "FIXED_AMOUNT", "BUY_X_GET_Y", "FREE_SHIPPING"]
           - name: is_active
             tests: [not_null]
 
