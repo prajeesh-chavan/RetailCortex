@@ -71,3 +71,13 @@ sources:
           - name: is_active
             tests: [not_null]
 
+      - name: addresses
+        description: "Cleaned address records written incrementally by PySpark"
+        columns:
+          - name: address_id
+            tests: [unique, not_null]
+          - name: address_line_1
+            tests: [not_null]
+          - name: locality
+            tests: [not_null]
+
