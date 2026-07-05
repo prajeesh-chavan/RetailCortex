@@ -1,4 +1,4 @@
-ENTITIES := customers orders products
+ENTITIES := customers orders products carriers
 ENTITY ?= customers
 
 bronze:
