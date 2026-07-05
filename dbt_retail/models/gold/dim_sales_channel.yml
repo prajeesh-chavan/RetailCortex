@@ -1,0 +1,16 @@
+version: 2
+
+models:
+  - name: dim_sales_channel
+    description: "Sales channel dimension — one row per channel, built incrementally from silver"
+    columns:
+      - name: channel_key
+        description: "Surrogate key generated via dbt_utils.generate_surrogate_key"
+        tests: [unique, not_null]
+      - name: channel_id
+        description: "Natural key from source system"
+        tests: [not_null]
+      - name: channel_name
+        tests: [not_null]
+      - name: is_active
+        tests: [not_null]
