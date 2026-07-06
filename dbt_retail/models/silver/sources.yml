@@ -71,3 +71,27 @@ sources:
           - name: is_active
             tests: [not_null]
 
+      - name: payments
+        description: "Cleaned payment records written incrementally by PySpark"
+        columns:
+          - name: payment_id
+            tests: [unique, not_null]
+          - name: order_id
+            tests: [not_null]
+          - name: payment_method
+            tests:
+              - accepted_values:
+                  values: ["CARD", "UPI", "NET_BANKING", "WALLET", "BANK_TRANSFER", "CASH_ON_DELIVERY"]
+          - name: amount
+            tests: [not_null]
+
+      - name: refunds
+        description: "Cleaned refund records written incrementally by PySpark"
+        columns:
+          - name: refund_id
+            tests: [unique, not_null]
+          - name: order_id
+            tests: [not_null]
+          - name: refund_amount
+            tests: [not_null]
+
