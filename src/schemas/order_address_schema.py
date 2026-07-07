@@ -1,0 +1,41 @@
+from pyspark.sql.types import DateType, StructField, StructType, StringType, TimestampType
+
+ORDER_ADDRESS_SCHEMA = StructType([
+    StructField("order_address_id", StringType()),
+    StructField("order_id", StringType()),
+    StructField("customer_address_id", StringType(), True),
+    StructField("address_type", StringType()),
+    StructField("recipient_name", StringType()),
+    StructField("recipient_phone", StringType()),
+    StructField("address_line_1", StringType()),
+    StructField("address_line_2", StringType(), True),
+    StructField("locality", StringType()),
+    StructField("administrative_area", StringType()),
+    StructField("postal_code", StringType()),
+    StructField("country_code", StringType()),
+    StructField("created_at", StringType()),
+    StructField("updated_at", StringType()),
+])
+
+ORDER_ADDRESS_BRONZE_SCHEMA = StructType([
+    StructField("order_address_id", StringType()),
+    StructField("order_id", StringType()),
+    StructField("customer_address_id", StringType(), True),
+    StructField("address_type", StringType()),
+    StructField("recipient_name", StringType()),
+    StructField("recipient_phone", StringType()),
+    StructField("address_line_1", StringType()),
+    StructField("address_line_2", StringType(), True),
+    StructField("locality", StringType()),
+    StructField("administrative_area", StringType()),
+    StructField("postal_code", StringType()),
+    StructField("country_code", StringType()),
+    StructField("created_at", StringType()),
+    StructField("updated_at", StringType()),
+    StructField("kafka_key", StringType()),
+    StructField("kafka_topic", StringType()),
+    StructField("kafka_partition", StringType()),
+    StructField("kafka_offset", StringType()),
+    StructField("ingestion_timestamp", TimestampType()),
+    StructField("ingestion_date", DateType()),
+])
