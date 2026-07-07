@@ -10,7 +10,7 @@ WITH source_silver AS (
 )
 
 SELECT
-    {{ dbt_utils.generate_surrogate_key(['category_id']) }} AS category_key,
+    {{ dbt_utils.generate_surrogate_key(['cat.category_id']) }} AS category_key,
     cat.category_id,
     cat.category_name,
     parent.category_name AS parent_category_name,
