@@ -80,6 +80,15 @@ sources:
           - name: is_active
             tests: [not_null]
 
+      - name: order_item_discounts
+        description: "Cleaned order item discount records written incrementally by PySpark"
+        columns:
+          - name: order_item_discount_id
+            tests: [unique, not_null]
+          - name: order_item_id
+            tests: [not_null]
+          - name: discount_amount
+          
       - name: returns
         description: "Cleaned return records written incrementally by PySpark"
         columns:
