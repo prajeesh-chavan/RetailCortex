@@ -1,4 +1,5 @@
-from pyspark.sql.functions import col, to_timestamp, lower
+from pyspark.sql.functions import col, lower, to_timestamp
+
 from src.schemas.brand_schema import BRAND_BRONZE_SCHEMA
 from src.silver.runner import run_silver_pipeline
 

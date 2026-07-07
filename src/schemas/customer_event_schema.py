@@ -1,4 +1,4 @@
-from pyspark.sql.types import DateType, StructField, StructType, StringType, TimestampType
+from pyspark.sql.types import DateType, StringType, StructField, StructType, TimestampType
 
 CUSTOMER_EVENT_SCHEMA = StructType([
     StructField("event_id", StringType()),

@@ -1,9 +1,11 @@
 import os
+
 from dotenv import load_dotenv
 
 load_dotenv()
 
-import yaml
+import yaml  # noqa: E402 — intentional: load_dotenv before yaml
+
 
 def load_config(config_path: str) -> dict:
     """

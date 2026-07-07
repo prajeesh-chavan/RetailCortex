@@ -1,4 +1,4 @@
-from pyspark.sql.types import DateType, StructField, StructType, StringType, TimestampType
+from pyspark.sql.types import DateType, StringType, StructField, StructType, TimestampType
 
 CARRIER_SCHEMA = StructType([
     StructField("carrier_id", StringType()),

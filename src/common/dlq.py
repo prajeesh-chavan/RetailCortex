@@ -1,7 +1,7 @@
 from pathlib import Path
-from src.common.settings import SETTINGS
-from src.common.logger import setup_logger
 
+from src.common.logger import setup_logger
+from src.common.settings import SETTINGS
 
 logger = setup_logger("dlq")
 

@@ -1,4 +1,4 @@
-from pyspark.sql.types import DateType, StructField, StructType, StringType, TimestampType
+from pyspark.sql.types import DateType, StringType, StructField, StructType, TimestampType
 
 CART_ITEM_SCHEMA = StructType([
     StructField("cart_item_id", StringType()),

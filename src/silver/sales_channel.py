@@ -1,4 +1,5 @@
-from pyspark.sql.functions import col, to_timestamp, lower
+from pyspark.sql.functions import col, lower, to_timestamp
+
 from src.schemas.sales_channel_schema import SALES_CHANNEL_BRONZE_SCHEMA
 from src.silver.runner import run_silver_pipeline
 

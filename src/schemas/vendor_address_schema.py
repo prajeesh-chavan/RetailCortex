@@ -1,4 +1,4 @@
-from pyspark.sql.types import DateType, StructField, StructType, StringType, TimestampType
+from pyspark.sql.types import DateType, StringType, StructField, StructType, TimestampType
 
 VENDOR_ADDRESS_SCHEMA = StructType([
     StructField("vendor_address_id", StringType()),

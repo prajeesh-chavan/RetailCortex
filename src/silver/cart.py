@@ -1,4 +1,5 @@
-from pyspark.sql.functions import col, to_timestamp
+from pyspark.sql.functions import to_timestamp
+
 from src.schemas.cart_schema import CART_BRONZE_SCHEMA
 from src.silver.runner import run_silver_pipeline
 
