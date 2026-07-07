@@ -45,6 +45,7 @@ sources:
             tests: [not_null]
           - name: is_active
             tests: [not_null]
+            
       - name: sales_channels
         description: "Cleaned sales channel records written incrementally by PySpark"
         columns:
@@ -55,6 +56,14 @@ sources:
           - name: is_active
             tests: [not_null]
 
+      - name: categories
+        description: "Cleaned category records written incrementally by PySpark"
+        columns:
+          - name: category_id
+            tests: [unique, not_null]
+          - name: category_name
+            tests: [not_null]
+            
       - name: promotions
         description: "Cleaned promotion records written incrementally by PySpark"
         columns:
@@ -79,5 +88,14 @@ sources:
           - name: brand_name
             tests: [not_null]
           - name: is_active
+          
+      - name: addresses
+        description: "Cleaned address records written incrementally by PySpark"
+        columns:
+          - name: address_id
+            tests: [unique, not_null]
+          - name: address_line_1
+            tests: [not_null]
+          - name: locality
             tests: [not_null]
 
