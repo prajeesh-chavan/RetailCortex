@@ -1,0 +1,18 @@
+version: 2
+
+models:
+  - name: customer_360
+    description: "Customer 360 analytics — one row per customer with purchase behavior, segmentation, and lifetime value metrics. Built as a full refresh table."
+    columns:
+      - name: customer_key
+        tests: [unique, not_null]
+      - name: total_orders
+        tests: [not_null]
+      - name: total_spend
+        tests: [not_null]
+      - name: customer_segment
+        tests:
+          - accepted_values:
+              values: ["PLATINUM", "GOLD", "SILVER", "BRONZE", "INACTIVE"]
+      - name: last_refresh_timestamp
+        tests: [not_null]

@@ -1,0 +1,16 @@
+version: 2
+
+models:
+  - name: vendor_performance
+    description: "Vendor performance analytics — one row per vendor with product, sales, inventory, and fulfillment metrics. Built as a full refresh table."
+    columns:
+      - name: vendor_performance_key
+        tests: [unique, not_null]
+      - name: vendor_key
+        tests: [unique, not_null]
+      - name: total_products
+        tests: [not_null]
+      - name: total_sales
+        tests: [not_null]
+      - name: last_refresh_timestamp
+        tests: [not_null]

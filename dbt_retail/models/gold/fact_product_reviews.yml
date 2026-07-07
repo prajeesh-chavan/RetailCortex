@@ -1,0 +1,14 @@
+version: 2
+
+models:
+  - name: fact_product_reviews
+    description: "Product review fact — one row per review, built incrementally from silver"
+    columns:
+      - name: review_key
+        tests: [unique, not_null]
+      - name: review_id
+        tests: [not_null]
+      - name: product_key
+        tests: [not_null]
+      - name: rating
+        tests: [not_null]
