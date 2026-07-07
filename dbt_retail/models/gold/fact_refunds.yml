@@ -1,0 +1,12 @@
+version: 2
+
+models:
+  - name: fact_refunds
+    description: "Refund fact — one row per refund transaction, built incrementally from silver"
+    columns:
+      - name: refund_key
+        tests: [unique, not_null]
+      - name: refund_id
+        tests: [not_null]
+      - name: refund_amount
+        tests: [not_null]
