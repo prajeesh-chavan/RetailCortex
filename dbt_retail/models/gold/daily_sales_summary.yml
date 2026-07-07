@@ -1,0 +1,20 @@
+version: 2
+
+models:
+  - name: daily_sales_summary
+    description: "Daily sales summary — one row per day per sales channel with revenue, discounts, and new customer counts. Built as a full refresh table."
+    columns:
+      - name: daily_summary_key
+        tests: [unique, not_null]
+      - name: summary_date_key
+        tests: [not_null]
+      - name: channel_key
+        tests: [not_null]
+      - name: total_orders
+        tests: [not_null]
+      - name: gross_revenue
+        tests: [not_null]
+      - name: net_revenue
+        tests: [not_null]
+      - name: last_refresh_timestamp
+        tests: [not_null]

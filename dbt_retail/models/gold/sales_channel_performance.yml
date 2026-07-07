@@ -1,0 +1,16 @@
+version: 2
+
+models:
+  - name: sales_channel_performance
+    description: "Sales channel performance analytics — one row per channel with order, revenue, customer, and refund metrics. Built as a full refresh table."
+    columns:
+      - name: channel_performance_key
+        tests: [unique, not_null]
+      - name: channel_key
+        tests: [unique, not_null]
+      - name: total_orders
+        tests: [not_null]
+      - name: total_revenue
+        tests: [not_null]
+      - name: last_refresh_timestamp
+        tests: [not_null]

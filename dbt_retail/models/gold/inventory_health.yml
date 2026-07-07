@@ -1,0 +1,20 @@
+version: 2
+
+models:
+  - name: inventory_health
+    description: "Inventory health analytics — one row per warehouse-variant with stock status classification. Built as a full refresh table."
+    columns:
+      - name: inventory_health_key
+        tests: [unique, not_null]
+      - name: product_key
+        tests: [not_null]
+      - name: warehouse_key
+        tests: [not_null]
+      - name: quantity_on_hand
+        tests: [not_null]
+      - name: stock_status
+        tests:
+          - accepted_values:
+              values: ["IN_STOCK", "LOW_STOCK", "OUT_OF_STOCK", "OVERSTOCKED"]
+      - name: last_refresh_timestamp
+        tests: [not_null]

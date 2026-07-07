@@ -1,0 +1,16 @@
+version: 2
+
+models:
+  - name: product_performance
+    description: "Product performance analytics — one row per product variant with sales, returns, and review metrics. Built as a full refresh table."
+    columns:
+      - name: product_performance_key
+        tests: [unique, not_null]
+      - name: product_key
+        tests: [unique, not_null]
+      - name: total_units_sold
+        tests: [not_null]
+      - name: total_revenue
+        tests: [not_null]
+      - name: last_refresh_timestamp
+        tests: [not_null]
