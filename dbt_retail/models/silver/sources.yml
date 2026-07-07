@@ -80,6 +80,29 @@ sources:
           - name: is_active
             tests: [not_null]
 
+      - name: returns
+        description: "Cleaned return records written incrementally by PySpark"
+        columns:
+          - name: return_id
+            tests: [unique, not_null]
+          - name: order_id
+            tests: [not_null]
+          - name: return_number
+            tests: [unique, not_null]
+          - name: return_status
+            tests:
+              - accepted_values:
+                  values: ["REQUESTED", "APPROVED", "REJECTED", "RECEIVED", "REFUNDED", "CLOSED"]
+
+      - name: return_items
+        description: "Cleaned return item records written incrementally by PySpark"
+        columns:
+          - name: return_item_id
+            tests: [unique, not_null]
+          - name: return_id
+            tests: [not_null]
+          - name: order_item_id
+          
       - name: shipments
         description: "Cleaned shipment records written incrementally by PySpark"
         columns:
