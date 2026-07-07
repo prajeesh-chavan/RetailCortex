@@ -80,6 +80,20 @@ sources:
           - name: is_active
             tests: [not_null]
 
+      - name: warehouses
+        description: "Cleaned warehouse records written incrementally by PySpark"
+        columns:
+          - name: warehouse_id
+            tests: [unique, not_null]
+          - name: warehouse_code
+            tests: [unique, not_null]
+          - name: warehouse_name
+            tests: [not_null]
+          - name: warehouse_status
+            tests:
+              - accepted_values:
+                  values: ["ACTIVE", "INACTIVE", "CLOSED"]
+                  
       - name: products
         description: "Cleaned product records written incrementally by PySpark"
         columns:
