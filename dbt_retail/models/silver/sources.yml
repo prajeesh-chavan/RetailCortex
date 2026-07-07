@@ -303,3 +303,45 @@ sources:
           - name: locality
             tests: [not_null]
 
+      - name: product_reviews
+        description: "Cleaned product review records written incrementally by PySpark"
+        columns:
+          - name: review_id
+            tests: [unique, not_null]
+          - name: product_id
+            tests: [not_null]
+          - name: customer_id
+            tests: [not_null]
+          - name: rating
+            tests: [not_null]
+
+      - name: carts
+        description: "Cleaned cart records written incrementally by PySpark"
+        columns:
+          - name: cart_id
+            tests: [unique, not_null]
+          - name: customer_id
+            tests: [not_null]
+          - name: cart_status
+            tests: [not_null]
+
+      - name: cart_items
+        description: "Cleaned cart item records written incrementally by PySpark"
+        columns:
+          - name: cart_item_id
+            tests: [unique, not_null]
+          - name: cart_id
+            tests: [not_null]
+          - name: variant_id
+            tests: [not_null]
+
+      - name: customer_events
+        description: "Cleaned customer event records written incrementally by PySpark"
+        columns:
+          - name: event_id
+            tests: [unique, not_null]
+          - name: customer_id
+            tests: [not_null]
+          - name: event_type
+            tests: [not_null]
+
