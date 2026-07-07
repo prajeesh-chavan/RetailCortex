@@ -41,10 +41,11 @@ new_customer_agg AS (
 
 return_agg AS (
     SELECT
-        channel_key,
-        COUNT(DISTINCT return_key) AS return_count
-    FROM {{ ref('fact_returns') }}
-    GROUP BY channel_key
+        o.channel_key,
+        COUNT(DISTINCT r.return_key) AS return_count
+    FROM {{ ref('fact_returns') }} r
+    JOIN {{ ref('fact_orders') }} o ON r.order_key = o.order_key
+    GROUP BY o.channel_key
 )
 
 SELECT

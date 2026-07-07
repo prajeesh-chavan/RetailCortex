@@ -21,6 +21,7 @@ silver_variants AS (
 SELECT
     {{ dbt_utils.generate_surrogate_key(['pv.variant_id']) }} AS product_key,
     p.product_id,
+    p.vendor_id,
     pv.variant_id,
     pv.sku,
     pv.barcode,

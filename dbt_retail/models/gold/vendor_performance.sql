@@ -53,13 +53,14 @@ inventory_agg AS (
 
 shipment_agg AS (
     SELECT
-        vendor_key,
-        AVG(DATEDIFF('day', shipped_at, delivered_at)) AS average_fulfillment_time_days,
-        SUM(CASE WHEN delivered_at > estimated_delivery_at THEN 1 ELSE 0 END) AS late_delivery_count,
-        SUM(CASE WHEN delivered_at <= estimated_delivery_at THEN 1 ELSE 0 END) AS on_time_delivery_count,
-        MAX(delivered_at) AS last_delivery_date
-    FROM {{ ref('fact_shipments') }}
-    GROUP BY vendor_key
+        foi.vendor_key,
+        AVG(DATEDIFF('day', fs.shipped_at, fs.delivered_at)) AS average_fulfillment_time_days,
+        SUM(CASE WHEN fs.delivered_at > fs.estimated_delivery_at THEN 1 ELSE 0 END) AS late_delivery_count,
+        SUM(CASE WHEN fs.delivered_at <= fs.estimated_delivery_at THEN 1 ELSE 0 END) AS on_time_delivery_count,
+        MAX(fs.delivered_at) AS last_delivery_date
+    FROM {{ ref('fact_shipments') }} fs
+    JOIN {{ ref('fact_order_items') }} foi ON fs.order_key = foi.order_key
+    GROUP BY foi.vendor_key
 )
 
 SELECT
