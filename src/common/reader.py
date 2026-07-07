@@ -1,5 +1,6 @@
 from pyspark.sql import SparkSession
 
+
 def read_kafka_stream(
     spark: SparkSession,
     bootstrap_servers: str,

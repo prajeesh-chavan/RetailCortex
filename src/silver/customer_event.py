@@ -1,4 +1,5 @@
-from pyspark.sql.functions import col, to_timestamp
+from pyspark.sql.functions import to_timestamp
+
 from src.schemas.customer_event_schema import CUSTOMER_EVENT_BRONZE_SCHEMA
 from src.silver.runner import run_silver_pipeline
 

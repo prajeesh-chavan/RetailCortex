@@ -1,4 +1,5 @@
-from pyspark.sql.functions import col, to_timestamp, to_date, lower, concat_ws, upper
+from pyspark.sql.functions import col, concat_ws, lower, to_date, to_timestamp, upper
+
 from src.schemas.customer_schema import CUSTOMER_BRONZE_SCHEMA
 from src.silver.runner import run_silver_pipeline
 
