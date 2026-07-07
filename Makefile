@@ -1,4 +1,4 @@
-ENTITIES := customers orders products sales_channels carriers promotions vendors vendor_addresses
+ENTITIES := customers orders products sales_channels carriers categories promotions addresses brands vendors vendor_addresses
 
 bronze:
 	python -m src.bronze.$(ENTITY)
