@@ -1,4 +1,4 @@
-ENTITIES := customers orders products sales_channels carriers categories promotions addresses brands vendors vendor_addresses customer_addresses product_variants inventory inventory_movements order_items order_addresses order_status_history payments refunds shipments shipment_items returns return_items order_item_discounts product_reviews carts cart_items customer_events
+ENTITIES := customer order product sales_channel carrier category promotion address brand vendor vendor_address customer_address product_variant warehouse inventory inventory_movement order_item order_address order_status_history payment refund shipment shipment_item returns return_item order_item_discount product_review cart cart_item customer_event
 
 bronze:
 	python -m src.bronze.$(ENTITY)
@@ -17,6 +17,12 @@ silver-all:
 		echo ">>> Running silver pipeline for $$entity..."; \
 		python -m src.silver.$$entity; \
 	done
+
+pipeline:
+	python run_pipeline.py $(ARGS)
+
+pipeline-parallel:
+	python run_pipeline.py --parallel 4 $(ARGS)
 
 dbt-deps:
 	cd dbt_retail && dbt deps
