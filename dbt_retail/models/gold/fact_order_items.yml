@@ -1,0 +1,14 @@
+version: 2
+
+models:
+  - name: fact_order_items
+    description: "Order item fact — one row per order item line, built incrementally from silver"
+    columns:
+      - name: order_item_key
+        tests: [unique, not_null]
+      - name: order_item_id
+        tests: [not_null]
+      - name: order_key
+        tests: [not_null]
+      - name: line_total_amount
+        tests: [not_null]

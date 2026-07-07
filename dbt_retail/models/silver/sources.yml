@@ -80,6 +80,49 @@ sources:
           - name: is_active
             tests: [not_null]
 
+      - name: orders
+        description: "Cleaned order records written incrementally by PySpark"
+        columns:
+          - name: order_id
+            tests: [unique, not_null]
+          - name: order_number
+            tests: [unique, not_null]
+          - name: order_status
+            tests:
+              - accepted_values:
+                  values: ["PLACED", "CONFIRMED", "PROCESSING", "SHIPPED", "DELIVERED", "CANCELLED", "RETURNED"]
+          - name: total_amount
+            tests: [not_null]
+
+      - name: order_items
+        description: "Cleaned order item records written incrementally by PySpark"
+        columns:
+          - name: order_item_id
+            tests: [unique, not_null]
+          - name: order_id
+            tests: [not_null]
+          - name: variant_id
+            tests: [not_null]
+          - name: item_status
+            tests:
+              - accepted_values:
+                  values: ["PENDING", "CANCELLED", "PARTIALLY_FULFILLED", "FULFILLED", "PARTIALLY_RETURNED", "RETURNED"]
+
+      - name: order_addresses
+        description: "Cleaned order address records written incrementally by PySpark"
+        columns:
+          - name: order_address_id
+            tests: [unique, not_null]
+          - name: order_id
+            tests: [not_null]
+
+      - name: order_status_history
+        description: "Cleaned order status history records written incrementally by PySpark"
+        columns:
+          - name: order_status_history_id
+            tests: [unique, not_null]
+          - name: order_id
+          
       - name: inventory
         description: "Cleaned inventory records written incrementally by PySpark"
         columns:
