@@ -71,3 +71,27 @@ sources:
           - name: is_active
             tests: [not_null]
 
+      - name: shipments
+        description: "Cleaned shipment records written incrementally by PySpark"
+        columns:
+          - name: shipment_id
+            tests: [unique, not_null]
+          - name: order_id
+            tests: [not_null]
+          - name: carrier_id
+            tests: [not_null]
+          - name: shipment_status
+            tests:
+              - accepted_values:
+                  values: ["PENDING", "PICKING", "PACKED", "SHIPPED", "IN_TRANSIT", "DELIVERED", "FAILED", "RETURNED_TO_SENDER"]
+
+      - name: shipment_items
+        description: "Cleaned shipment item records written incrementally by PySpark"
+        columns:
+          - name: shipment_item_id
+            tests: [unique, not_null]
+          - name: shipment_id
+            tests: [not_null]
+          - name: order_item_id
+            tests: [not_null]
+
