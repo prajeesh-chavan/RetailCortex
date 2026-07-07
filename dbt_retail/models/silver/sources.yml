@@ -80,6 +80,15 @@ sources:
           - name: is_active
             tests: [not_null]
 
+      - name: customer_addresses
+        description: "Cleaned customer-address mapping records written incrementally by PySpark"
+        columns:
+          - name: customer_address_id
+            tests: [unique, not_null]
+          - name: customer_id
+            tests: [not_null]
+          - name: address_id
+          
       - name: vendors
         description: "Cleaned vendor records written incrementally by PySpark"
         columns:
