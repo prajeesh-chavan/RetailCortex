@@ -1,0 +1,16 @@
+version: 2
+
+models:
+  - name: dim_category
+    description: "Category dimension — one row per category with parent name, built incrementally from silver"
+    columns:
+      - name: category_key
+        description: "Surrogate key generated via dbt_utils.generate_surrogate_key"
+        tests: [unique, not_null]
+      - name: category_id
+        description: "Natural key from source system"
+        tests: [not_null]
+      - name: category_name
+        tests: [not_null]
+      - name: is_active
+        tests: [not_null]
