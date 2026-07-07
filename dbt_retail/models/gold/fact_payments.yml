@@ -1,0 +1,14 @@
+version: 2
+
+models:
+  - name: fact_payments
+    description: "Payment fact — one row per payment transaction, built incrementally from silver"
+    columns:
+      - name: payment_key
+        tests: [unique, not_null]
+      - name: payment_id
+        tests: [not_null]
+      - name: order_key
+        tests: [not_null]
+      - name: amount
+        tests: [not_null]

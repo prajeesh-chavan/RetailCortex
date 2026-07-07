@@ -1,0 +1,16 @@
+version: 2
+
+models:
+  - name: fact_returns
+    description: "Return fact — one row per return request, built incrementally from silver"
+    columns:
+      - name: return_key
+        tests: [unique, not_null]
+      - name: return_id
+        tests: [not_null]
+      - name: order_key
+        tests: [not_null]
+      - name: return_status
+        tests:
+          - accepted_values:
+              values: ["REQUESTED", "APPROVED", "REJECTED", "RECEIVED", "REFUNDED", "CLOSED"]

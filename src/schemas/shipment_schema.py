@@ -1,0 +1,41 @@
+from pyspark.sql.types import DateType, StructField, StructType, StringType, TimestampType
+
+SHIPMENT_SCHEMA = StructType([
+    StructField("shipment_id", StringType()),
+    StructField("order_id", StringType()),
+    StructField("carrier_id", StringType()),
+    StructField("warehouse_id", StringType()),
+    StructField("shipment_number", StringType()),
+    StructField("tracking_number", StringType()),
+    StructField("shipment_status", StringType()),
+    StructField("shipped_at", StringType()),
+    StructField("estimated_delivery_at", StringType(), True),
+    StructField("delivered_at", StringType(), True),
+    StructField("shipping_charge", StringType()),
+    StructField("created_at", StringType()),
+    StructField("updated_at", StringType()),
+    StructField("is_deleted", StringType()),
+])
+
+SHIPMENT_BRONZE_SCHEMA = StructType([
+    StructField("shipment_id", StringType()),
+    StructField("order_id", StringType()),
+    StructField("carrier_id", StringType()),
+    StructField("warehouse_id", StringType()),
+    StructField("shipment_number", StringType()),
+    StructField("tracking_number", StringType()),
+    StructField("shipment_status", StringType()),
+    StructField("shipped_at", StringType()),
+    StructField("estimated_delivery_at", StringType(), True),
+    StructField("delivered_at", StringType(), True),
+    StructField("shipping_charge", StringType()),
+    StructField("created_at", StringType()),
+    StructField("updated_at", StringType()),
+    StructField("is_deleted", StringType()),
+    StructField("kafka_key", StringType()),
+    StructField("kafka_topic", StringType()),
+    StructField("kafka_partition", StringType()),
+    StructField("kafka_offset", StringType()),
+    StructField("ingestion_timestamp", TimestampType()),
+    StructField("ingestion_date", DateType()),
+])

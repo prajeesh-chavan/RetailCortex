@@ -1,0 +1,20 @@
+version: 2
+
+models:
+  - name: gold_dim_warehouse
+    description: "Warehouse dimension — one row per warehouse with address, built incrementally from silver"
+    columns:
+      - name: warehouse_key
+        description: "Surrogate key generated via dbt_utils.generate_surrogate_key"
+        tests: [unique, not_null]
+      - name: warehouse_id
+        description: "Natural key from source system"
+        tests: [not_null]
+      - name: warehouse_code
+        tests: [unique, not_null]
+      - name: warehouse_name
+        tests: [not_null]
+      - name: warehouse_status
+        tests:
+          - accepted_values:
+              values: ["ACTIVE", "INACTIVE", "CLOSED"]
