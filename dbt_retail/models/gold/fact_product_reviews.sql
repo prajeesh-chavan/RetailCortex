@@ -10,7 +10,9 @@ WITH source_silver AS (
 ),
 
 product_keys AS (
-    SELECT variant_id, product_key FROM {{ ref('gold_dim_product') }}
+    SELECT product_id, product_key,
+        ROW_NUMBER() OVER (PARTITION BY product_id ORDER BY variant_id) AS rn
+    FROM {{ ref('gold_dim_product') }}
 ),
 
 customer_keys AS (
@@ -28,5 +30,5 @@ SELECT
     r.ingestion_timestamp AS silver_ingest_time,
     CURRENT_TIMESTAMP() AS dw_created_at
 FROM source_silver r
-LEFT JOIN product_keys pk ON r.product_id = pk.variant_id
+LEFT JOIN product_keys pk ON r.product_id = pk.product_id AND pk.rn = 1
 LEFT JOIN customer_keys ck ON r.customer_id = ck.customer_id
