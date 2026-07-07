@@ -1,0 +1,18 @@
+version: 2
+
+models:
+  - name: dim_vendor
+    description: "Vendor dimension — one row per vendor with default address, built incrementally from silver"
+    columns:
+      - name: vendor_key
+        description: "Surrogate key generated via dbt_utils.generate_surrogate_key"
+        tests: [unique, not_null]
+      - name: vendor_id
+        description: "Natural key from source system"
+        tests: [not_null]
+      - name: vendor_name
+        tests: [not_null]
+      - name: vendor_status
+        tests:
+          - accepted_values:
+              values: ["ACTIVE", "INACTIVE", "SUSPENDED"]
