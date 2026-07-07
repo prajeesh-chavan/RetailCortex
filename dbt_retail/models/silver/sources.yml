@@ -45,6 +45,7 @@ sources:
             tests: [not_null]
           - name: is_active
             tests: [not_null]
+            
       - name: sales_channels
         description: "Cleaned sales channel records written incrementally by PySpark"
         columns:
@@ -55,6 +56,14 @@ sources:
           - name: is_active
             tests: [not_null]
 
+      - name: categories
+        description: "Cleaned category records written incrementally by PySpark"
+        columns:
+          - name: category_id
+            tests: [unique, not_null]
+          - name: category_name
+            tests: [not_null]
+            
       - name: promotions
         description: "Cleaned promotion records written incrementally by PySpark"
         columns:
@@ -84,4 +93,75 @@ sources:
             tests:
               - accepted_values:
                   values: ["ACTIVE", "INACTIVE", "CLOSED"]
+                  
+      - name: products
+        description: "Cleaned product records written incrementally by PySpark"
+        columns:
+          - name: product_id
+            tests: [unique, not_null]
+          - name: product_name
+            tests: [not_null]
+          - name: product_status
+            tests:
+              - accepted_values:
+                  values: ["ACTIVE", "DISCONTINUED", "OUT_OF_CATALOG"]
+
+      - name: product_variants
+        description: "Cleaned product variant records written incrementally by PySpark"
+        columns:
+          - name: variant_id
+            tests: [unique, not_null]
+          - name: product_id
+            tests: [not_null]
+          - name: sku
+            tests: [unique, not_null]
+            
+      - name: customer_addresses
+        description: "Cleaned customer-address mapping records written incrementally by PySpark"
+        columns:
+          - name: customer_address_id
+            tests: [unique, not_null]
+          - name: customer_id
+            tests: [not_null]
+          - name: address_id
+          
+      - name: vendors
+        description: "Cleaned vendor records written incrementally by PySpark"
+        columns:
+          - name: vendor_id
+            tests: [unique, not_null]
+          - name: vendor_name
+            tests: [not_null]
+          - name: vendor_status
+            tests:
+              - accepted_values:
+                  values: ["ACTIVE", "INACTIVE", "SUSPENDED"]
+
+      - name: vendor_addresses
+        description: "Cleaned vendor-address mapping records written incrementally by PySpark"
+        columns:
+          - name: vendor_address_id
+            tests: [unique, not_null]
+          - name: vendor_id
+            tests: [not_null]
+          - name: address_id
+          
+      - name: brands
+        description: "Cleaned brand records written incrementally by PySpark"
+        columns:
+          - name: brand_id
+            tests: [unique, not_null]
+          - name: brand_name
+            tests: [not_null]
+          - name: is_active
+          
+      - name: addresses
+        description: "Cleaned address records written incrementally by PySpark"
+        columns:
+          - name: address_id
+            tests: [unique, not_null]
+          - name: address_line_1
+            tests: [not_null]
+          - name: locality
+            tests: [not_null]
 
