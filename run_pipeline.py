@@ -81,7 +81,10 @@ def run_bronze(entity, timeout):
         logger.info(f"[bronze] {entity} timed out after {timeout}s — partial data expected")
         return True, elapsed
     if rc != 0:
-        logger.error(f"[bronze] {entity} failed (rc={rc})\n{stderr[:500]}")
+        logger.error(f"[bronze] {entity} failed (rc={rc})")
+        if stderr:
+            for line in stderr.strip().splitlines()[-20:]:
+                logger.error(f"  {line}")
         return False, elapsed
     logger.info(f"[bronze] {entity} completed in {elapsed:.1f}s")
     return True, elapsed
@@ -95,15 +98,31 @@ def run_silver(entity):
     )
     elapsed = time.time() - start
     if rc != 0:
-        logger.error(f"[silver] {entity} failed (rc={rc})\n{stderr[:500]}")
+        logger.error(f"[silver] {entity} failed (rc={rc})")
+        if stderr:
+            for line in stderr.strip().splitlines()[-20:]:
+                logger.error(f"  {line}")
         return False, elapsed
     logger.info(f"[silver] {entity} completed in {elapsed:.1f}s")
     return True, elapsed
 
 
+def _dbt_binary():
+    venv = Path(__file__).resolve().parent / "env"
+    candidates = [
+        venv / "Scripts" / "dbt.exe",
+        venv / "bin" / "dbt",
+    ]
+    for c in candidates:
+        if c.exists():
+            return str(c)
+    return "dbt"
+
+
 def run_dbt():
+    dbt = _dbt_binary()
     results = {}
-    for cmd_name, cmd_args in [("dbt run", ["dbt", "run"]), ("dbt test", ["dbt", "test"])]:
+    for cmd_name, cmd_args in [("dbt deps", [dbt, "deps"]), ("dbt run", [dbt, "run"]), ("dbt test", [dbt, "test"])]:
         logger.info(f"[dbt] Starting {cmd_name}")
         start = time.time()
         rc, stdout, stderr = _run_subprocess(cmd_args, cwd=DBT_DIR)
