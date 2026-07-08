@@ -41,3 +41,12 @@ lint:
 
 clean:
 	rm -rf src/**/__pycache__ .pytest_cache
+
+docker-build:
+	docker compose build
+
+docker-run:
+	docker compose run --rm pipeline $(ARGS)
+
+docker-shell:
+	docker compose run --rm pipeline bash
